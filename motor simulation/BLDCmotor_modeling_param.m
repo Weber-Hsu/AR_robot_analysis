@@ -4,8 +4,8 @@ syms R L J B;
 syms Kt Km ; 
 
 P = 30;
-Ke = 0.02; 
-Kt = 0.01; % to be determined
+ke = 0.02; 
+kt = 0.01; % to be determined
 J = 0.1; % to be determined
 B = 0.1; % to be determined
 L = 0.1; % to be determined
