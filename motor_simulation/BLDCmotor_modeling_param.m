@@ -21,4 +21,4 @@ L = 0.5; % to be determined
 R = 2;
 
 
-sim('BLDCmotor_modeling')
+% sim('BLDCmotor_modeling')
