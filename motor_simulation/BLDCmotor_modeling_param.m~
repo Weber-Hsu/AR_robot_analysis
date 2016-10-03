@@ -25,7 +25,7 @@ ke = 11.623;
 kt = 0.0859; % to be determined
 J = 141e-7; % to be determined
 B = 0.1; % to be determined
-L = 0.324e-3; % to be determined
-R = 0.218;
+L = 0.5; % to be determined
+R = 0.02;
 
 % sim('BLDCmotor_modeling')
