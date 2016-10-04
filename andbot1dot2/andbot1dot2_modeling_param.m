@@ -22,16 +22,30 @@ num = [0 1.6095];
 den = [1 1.7857];
 P = tf(num,den,'InputDelay',0.4)
 Intg = tf(1,[1,0])
-Q =  tf(1,[1,0],'InputDelay',0.4)
-Qall = Intg - Q;
+Q =  tf(1,[1,0],'InputDelay',0.4);
+Qall = Intg - Q                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 P0 = tf(num,den);
 
+P0all = P0 * Qall;
+figure;
+bode(P0all,'b')
 Pall = P * Qall;
+figure;
 step(P0,'b',P,'r')
+figure;
 bode(P,'r',P0,'b')
+figure;
 bode(Pall,'r')
 
+alpha = 2000;
+k = 1;
+time_constant = 10;
+num_controller = k * [time_constant 1]
+den_controller = [time_constant * alpha 1]
+controller = tf(num_controller, den_controller) 
 
-
+pcompensation = controller * P * Qall
+figure;
+bode(pcompensation,'g')
 
 %sim('BLDCmotor_modeling')
