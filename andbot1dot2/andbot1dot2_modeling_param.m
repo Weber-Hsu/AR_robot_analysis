@@ -25,6 +25,7 @@ Intg = tf(1,[1,0])
 Q =  tf(1,[1,0],'InputDelay',0.4);
 Qall = Intg - Q                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
 P0 = tf(num,den);
+Tsample = 0.04;
 
 P0all = P0 * Qall;
 figure;
