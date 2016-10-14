@@ -20,6 +20,8 @@ R = 0.02;
 
 num = [0 1.6095];
 den = [1 1.7857];
+figure;
+bode(tf(7.415e-3,[1 10]));
 P = tf(num,den,'InputDelay',0.4)
 Intg = tf(1,[1,0])
 Q =  tf(1,[1,0],'InputDelay',0.4);
