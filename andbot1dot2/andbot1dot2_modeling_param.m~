@@ -18,6 +18,10 @@ B = 0.1; % to be determined
 L = 0.1; % to be determined
 R = 0.02;
 
+%% practical contraint
+VQ_MAX = 520;
+
+
 %% plant
 
 num = [0 7.415e-3];
@@ -38,6 +42,7 @@ Diff_Vel = 1/Tsample*parallel(Diff_Vel_n1,-Diff_Vel_n2);
 open_loop_PlantDiff_Vel = series(Plant_Vel,Diff_Vel)
 subplot(2,2,2);
 bode(open_loop_PlantDiff_Vel,'b');
+set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
 
 % figure;
 % step(open_loop_PlantDiff_Vel,'b')
@@ -55,5 +60,9 @@ pcompensation = controller * P * Qall
 figure;
 bode(pcompensation,'g')
 
+% PI controller
+Kp = 1500;
+Ki = 1;
+PI_controller = tf([],[]);
 
 %sim('BLDCmotor_modeling')
