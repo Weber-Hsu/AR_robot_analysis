@@ -25,8 +25,8 @@ Tsample = 0.01; %loop time
 
 %% plant_Vel
 
-num = [0 7.415e-3];
-den = [1 10];
+num = [0 0.261065];
+den = [1 2.5006];
 Plant_Vel = tf(num,den)
 figure;
 subplot(2,2,1)
