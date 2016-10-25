@@ -19,8 +19,8 @@ L = 0.1; % to be determined
 R = 0.02;
 
 %% practical condition
-VQ_MAX = 520;
-Tsample = 0.01; %loop time
+Vq_MAX = 520;
+Tsample = 0.04; %loop time
 
 
 %% plant_Vel
@@ -35,12 +35,11 @@ hold on;
 
 %% differential equation (velocity measurement)
 
+Diff_Vel_n1 = tf([0 1],[1 0])
+Diff_Vel_n2 = tf([0 1],[1,0],'OutputDelay',Tsample)
+Diff_Vel = 1/Tsample*(Diff_Vel_n1 - Diff_Vel_n2)%parallel(Diff_Vel_n1,-Diff_Vel_n2);
 
-Diff_Vel_n1 = tf([0 1],[1 0]);
-Diff_Vel_n2 = tf([0 1],[1,0],'OutputDelay',Tsample);
-Diff_Vel = 1/Tsample*parallel(Diff_Vel_n1,-Diff_Vel_n2);
-
-open_loop_PlantDiff_Vel = series(Plant_Vel,Diff_Vel)
+open_loop_PlantDiff_Vel = series(Plant_Vel,Diff_Vel);
 subplot(2,2,2);
 bode(open_loop_PlantDiff_Vel,'b');
 %set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
