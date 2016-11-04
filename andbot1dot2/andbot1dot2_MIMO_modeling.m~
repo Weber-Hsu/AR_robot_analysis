@@ -14,7 +14,7 @@ den_Vel = [1 6.313];
 Plant_Vel = tf(num_Vel,den_Vel);
 figure(1);
 subplot(2,2,1)
-bode(Plant_Vel);
+bode(Plant_Vel,'g');
 hold on;
 
 open_loop_Plantdelay_Vel = series(Plant_Vel,time_delay_tf);
@@ -32,18 +32,9 @@ hold on;
 % figure;
 % step(open_loop_PlantDiff_Vel,'b')
 
-%% velocity controller
-
-% alpha = 2000;
-% k = 1;
-% time_constant = 10;
-% num_controller = k * [time_constant 1]
-% den_controller = [time_constant * alpha 1]
-% controller = tf(num_controller, den_controller) 
-
 %% velocity loop PI controller
-Kp_Vel = 10;
-Ki_Vel = 5.9965;
+Kp_Vel = 13.1826;
+Ki_Vel = 53.9061;%32.4291;
 PI_Vel_controller = tf([Kp_Vel Ki_Vel],[1 0]);
 
 %% Plant_Vel + diff_Vel + controller
@@ -53,6 +44,14 @@ bode(open_loop_PlantDiff_VelController,'r');%open_loop_PlantDiff_Vel,'b');
 %set(gcf,'currentaxes',open_loop_PlantDiff_VelController);
 hold on;
 
+allmargin(open_loop_PlantDiff_VelController)
+gain_when_bandwidthFreq = db(evalfr(open_loop_PlantDiff_VelController,1*0.1j) * 2^(-0.5))
+%gain_when_bandwidthFreq = 20*(log((num_Vel(2) * Ki_Vel / den_Vel(2) / (0.1) *2^(-0.5)))) % (unit:dB)
+% freqresp(open_loop_PlantDiff_VelController,gain_when)
+[mag,phase,wout] = bode(open_loop_PlantDiff_VelController);
+mag = 20*log10(mag);
+ind = find(mag > gain_when_bandwidthFreq - 1 & mag < gain_when_bandwidthFreq + 1)
+bandwidth_vel = wout(ind)
 %% Plant_Vel + diff_Vel + controller + FeedForward
 
 num_Vel_ff = [0 6.313];
@@ -100,7 +99,8 @@ bode(open_loop_PlantDiff_OmegaController,'r');%,open_loop_PlantDiff_Omega,'b');
 %set(gcf,'currentaxes',open_loop_PlantDiff_VelController);
 hold on;
 
-dcgain
+bandwidth(open_loop_PlantDiff_OmegaController)
+allmargin(open_loop_PlantDiff_OmegaController);
 
 %% Plant_Omega + diff_Omega + controller + FeedForward
 

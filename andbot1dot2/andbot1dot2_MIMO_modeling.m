@@ -1,7 +1,7 @@
 clc ; clear ;
 andbot1dot2_param; % param m file
 
-simulation_time = 20; % set simulation time in simulink (Unit : sec)
+simulation_time = 10; % set simulation time in simulink (Unit : sec)
 %% common function
 time_delay_tf = exp(-Tsample*tf('s')); % time delay system
 input_Vel = 1;  % to simulink
@@ -32,18 +32,9 @@ hold on;
 % figure;
 % step(open_loop_PlantDiff_Vel,'b')
 
-%% velocity controller
-
-% alpha = 2000;
-% k = 1;
-% time_constant = 10;
-% num_controller = k * [time_constant 1]
-% den_controller = [time_constant * alpha 1]
-% controller = tf(num_controller, den_controller) 
-
 %% velocity loop PI controller
-Kp_Vel = 150;
-Ki_Vel = 1;
+Kp_Vel = 14.9624;%13.1826;
+Ki_Vel =  21.3962%9.43%21.3962;%32.4291;
 PI_Vel_controller = tf([Kp_Vel Ki_Vel],[1 0]);
 
 %% Plant_Vel + diff_Vel + controller
@@ -53,6 +44,14 @@ bode(open_loop_PlantDiff_VelController,'r');%open_loop_PlantDiff_Vel,'b');
 %set(gcf,'currentaxes',open_loop_PlantDiff_VelController);
 hold on;
 
+allmargin(open_loop_PlantDiff_VelController)
+gain_when_bandwidthFreq = db(evalfr(open_loop_PlantDiff_VelController,1*0.1j) * 2^(-0.5))
+%gain_when_bandwidthFreq = 20*(log((num_Vel(2) * Ki_Vel / den_Vel(2) / (0.1) *2^(-0.5)))) % (unit:dB)
+% freqresp(open_loop_PlantDiff_VelController,gain_when)
+[mag,phase,wout] = bode(open_loop_PlantDiff_VelController);
+mag = 20*log10(mag);
+ind = find(mag > gain_when_bandwidthFreq - 1 & mag < gain_when_bandwidthFreq + 1)
+bandwidth_vel = wout(ind)
 %% Plant_Vel + diff_Vel + controller + FeedForward
 
 num_Vel_ff = [0 6.313];
@@ -67,8 +66,7 @@ figure(2);
 subplot(2,2,1)
 bode(Plant_Omega,'g');
 hold on;
-dcgain(Plant_Omega)
-bandwidth(Plant_Omega)
+
 open_loop_Plantdelay_Omega = series(Plant_Omega,time_delay_tf);
 %% differential equation (Omega measurement)
 
@@ -87,8 +85,8 @@ hold on;
 %% omega controller
 
 % PI controller
-Kp_Omega = 1;
-Ki_Omega = 1.545;
+Kp_Omega = 4.4157;
+Ki_Omega = 5.8287;
 PI_Omega_controller = tf([Kp_Omega Ki_Omega],[1 0])
 % subplot(2,2,3);
 % bode(PI_Omega_controller);
@@ -102,7 +100,7 @@ bode(open_loop_PlantDiff_OmegaController,'r');%,open_loop_PlantDiff_Omega,'b');
 hold on;
 
 bandwidth(open_loop_PlantDiff_OmegaController)
-allmargin(open_loop_PlantDiff_OmegaController)
+allmargin(open_loop_PlantDiff_OmegaController);
 
 %% Plant_Omega + diff_Omega + controller + FeedForward
 

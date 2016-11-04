@@ -65,7 +65,7 @@ figure(3)
 bode(zeroholder,'r',zeroholder_exp, 'b', exp(-0.04*tf('s'))/tf('s'),'y')
 figure(4)
 Kp = 30;
-Ki = 100000;tf([Kp Ki],[1 0])
+Ki = 12;tf([Kp Ki],[1 0])
 bode(tf([Kp Ki],[1 0]),'b',tf([0 Kp],[0 1]),'r',tf([0 Ki],[1 0]),'g')
 figure(5)
 bode(tf([0 Ki],[1 0]),'g')
