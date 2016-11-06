@@ -80,24 +80,19 @@ clc;clear;
 % 
 % Ki =  Kp / tau
 % 
-% ess_desired = 0.5;
-% Kposition = (1 - ess_desired) / ess_desired;
-% controller_value = Kposition / (b/a)
+% % ess_desired = 0.5;
+% % Kposition = (1 - ess_desired) / ess_desired;
+% % controller_value = Kposition / (b/a)
+% % 
+% % Ki = controller_value * 0.5
 % 
-% Ki = controller_value * 0.5
-% 
-% slope_near_gaincross = (3.88-(-20.2))/(7.95-89.2)
-% Ki = wg * Kp
-% 
-% wg_new = wg / 5
-% gain_cross = 1 / (Ki / Kp);
-% Ki = wg_new * Kp;
+% slope_near_gaincross = 
 
 %% Omega loop spec design
 syms s a b c Final_value;
 
 a = 4.9887;
-b =  3.2693;
+b = 3.2693;
 
 syms s wg Ki Kp
 angle_estimation = 5; %(unit: deg)
@@ -105,7 +100,7 @@ PM_desire = 60 + angle_estimation;
 angle = -180+PM_desire
 
 wg = 13.2;%look into ''angle'' from bode plot (unit:rad/s)
-tau = 1 /(wg / 10);
+tau = 1 /(wg / 10)
 gain_desired_diff = -12.9; % look into "difference" from bode plot unit (unit: dB)
 Kp = 10^(abs(gain_desired_diff)/20)
 
@@ -113,15 +108,10 @@ Kp = 10^(abs(gain_desired_diff)/20)
 
 Ki =  Kp / tau
 
-ess_desired = 0.5;
-Kposition = (1 - ess_desired) / ess_desired;
-controller_value = Kposition / (b/a)
+% ess_desired = 0.5;
+% Kposition = (1 - ess_desired) / ess_desired;
+% controller_value = Kposition / (b/a)
 
-Ki = controller_value * 0.5
+% Ki = controller_value * 0.5
 
-slope_near_gaincross = (3.88-(-20.2))/(7.95-89.2)
-Ki = wg * Kp
-
-wg_new = wg / 5
-gain_cross = 1 / (Ki / Kp);
-Ki = wg_new * Kp;
+% slope_near_gaincross = 

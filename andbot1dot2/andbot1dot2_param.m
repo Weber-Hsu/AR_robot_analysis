@@ -19,7 +19,7 @@ L = 0.1; % to be determined
 R = 0.02;
 
 %% practical condition
-Vq_MAX = 520;
+Vq_MAX = 1000;
 Tsample = 0.04; %loop time
 
 
