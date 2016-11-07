@@ -12,11 +12,11 @@ andbot1dot2_MIMO_modeling_omega_loop; % omega loop m file;
 simulation_time = 10; % set simulation time in simulink (Unit : sec)
 
 % input
-input_Vel = 2;  % to simulink
+input_Vel = 1;  % to simulink
 input_Omega = 1; % to simulink
 % saturation
-Umax_Volt = 16; % Unit: V
-Umin_Volt = -16;
+Umax_Volt = 20; % Unit: V
+Umin_Volt = -20;
 
 sim('andbot1dot2_voltage_loop_frictioncompensation')
 %% data management
