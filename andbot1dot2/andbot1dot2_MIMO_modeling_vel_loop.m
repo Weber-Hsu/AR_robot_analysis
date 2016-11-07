@@ -27,6 +27,8 @@ hold on;
 %% velocity loop PI controller
 Kp_Vel = 14.9624;%13.1826;
 Ki_Vel = 21.3962;%9.43%21.3962;%32.4291;
+iTerm_Umax_Vel = 22;
+iTerm_Umin_Vel= -22;
 PI_controller_Vel = tf([Kp_Vel Ki_Vel],[1 0]);
 
 %% Plant_Vel + diff_Vel + controller

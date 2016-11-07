@@ -15,8 +15,8 @@ simulation_time = 10; % set simulation time in simulink (Unit : sec)
 input_Vel = 2;  % to simulink
 input_Omega = 1; % to simulink
 % saturation
-Umax_Volt = 16; % Unit: V
-Umin_Volt = -16;
+Umax_Volt = 10; % Unit: V
+Umin_Volt = -10;
 
 sim('andbot1dot2_voltage_loop_frictioncompensation')
 %% data management
