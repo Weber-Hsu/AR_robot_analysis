@@ -39,7 +39,7 @@ grid on;
 %set(gcf,'currentaxes',open_loop_PlantDiff_VelController);
 hold on;
 
-allmargin(open_loop_PlantDiff_VelController)
+stabilities_vel = allmargin(open_loop_PlantDiff_VelController)
 mag_atBWFreq_Vel = db(evalfr(open_loop_PlantDiff_VelController,1*0.1j) * 2^(-0.5)) % mag at BW freq: DC gain * 0.707
 %gain_when_bandwidthFreq = 20*(log((num_Vel(2) * Ki_Vel / den_Vel(2) / (0.1) *2^(-0.5)))) % (unit:dB)
 % freqresp(open_loop_PlantDiff_VelController,gain_when)
