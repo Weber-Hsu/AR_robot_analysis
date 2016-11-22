@@ -30,6 +30,7 @@ Ki_Vel = 21.3962;%9.43%21.3962;%32.4291;
 iTerm_Umax_Vel = 22;
 iTerm_Umin_Vel= -22;
 PI_controller_Vel = tf([Kp_Vel Ki_Vel],[1 0]);
+gain_anti_windup_Vel = 10;
 
 %% Plant_Vel + diff_Vel + controller
 open_loop_PlantDiff_VelController = series(open_loop_PlantDiff_Vel,PI_controller_Vel)

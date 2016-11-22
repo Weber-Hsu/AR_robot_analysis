@@ -33,6 +33,7 @@ Ki_Omega = 5.8287;
 iTerm_Umax_Omega = 22;
 iTerm_Umin_Omega = -22;
 PI_controller_Omega = tf([Kp_Omega Ki_Omega],[1 0]);
+gain_anti_windup_Omega = 10;
 % subplot(2,2,3);
 % bode(PI_Omega_controller);
 % hold on;

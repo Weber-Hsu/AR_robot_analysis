@@ -59,13 +59,31 @@ clc; clear;
 % ML.statename = {'ia1','x2','x3','ia2','x5','x6'};
 
 
-zeroholder = tf([0 1],[1 0]) * (1 - tf([-0.04/2 1],[0.04/2 1]))
-zeroholder_exp = tf([0 1],[1 0]) * ( 1- exp(-0.04*tf('s')))
-figure(3)
-bode(zeroholder,'r',zeroholder_exp, 'b', exp(-0.04*tf('s'))/tf('s'),'y')
-figure(4)
-Kp = 30;
-Ki = 12;tf([Kp Ki],[1 0])
-bode(tf([Kp Ki],[1 0]),'b',tf([0 Kp],[0 1]),'r',tf([0 Ki],[1 0]),'g')
-figure(5)
-bode(tf([0 Ki],[1 0]),'g')
+% zeroholder = tf([0 1],[1 0]) * (1 - tf([-0.04/2 1],[0.04/2 1]))
+% zeroholder_exp = tf([0 1],[1 0]) * ( 1- exp(-0.04*tf('s')))
+% figure(3)
+% bode(zeroholder,'r',zeroholder_exp, 'b', exp(-0.04*tf('s'))/tf('s'),'y')
+% figure(4)
+% Kp = 30;
+% Ki = 12;tf([Kp Ki],[1 0])
+% bode(tf([Kp Ki],[1 0]),'b',tf([0 Kp],[0 1]),'r',tf([0 Ki],[1 0]),'g')
+% figure(5)
+% bode(tf([0 Ki],[1 0]),'g')
+i = 1;
+sample = zeros(100,1);
+dT = 1;
+j = 1;
+while(j < 500)
+    enc = rostopic('echo', 'ENC_raw');
+    sample(i) = enc.Data;
+    encnow = sample(i);
+    i = i+1;
+    if ( i >= 101)
+        i = 1;
+    end
+    encpre = sample(i);
+    sum = encnow - encpre;
+    result(j) = sum / 100 * (1000/dT);
+    j = j+1;  
+end
+plot(result);
