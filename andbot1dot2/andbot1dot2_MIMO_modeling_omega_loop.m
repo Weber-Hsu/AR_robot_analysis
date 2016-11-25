@@ -12,17 +12,27 @@ bode(Plant_Omega,'g');grid on;
 hold on;
 
 open_loop_Plantdelay_Omega = series(Plant_Omega,time_delay_tf);
+%% Omega measurement
 %% differential equation (Omega measurement)
-
-Diff_n1_Omega = tf([0 1],[1 0]);
-Diff_n2_Omega = tf([0 1],[1,0],'OutputDelay',Tsample);
-Diff_Omega = 1/Tsample*parallel(Diff_n1_Omega,-Diff_n2_Omega);
-
-open_loop_PlantDiff_Omega = series(open_loop_Plantdelay_Omega,Diff_Omega);
-%subplot(2,2,2);
-bode(open_loop_PlantDiff_Omega,'b');grid on;
-%set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
-hold on;
+if (ENCOutputMode == ENCDiffMode)
+    Diff_n1_Omega = tf([0 1],[1 0]);
+    Diff_n2_Omega = tf([0 1],[1,0],'OutputDelay',Tsample);
+    Measure_Omega = 1/Tsample*parallel(Diff_n1_Omega,-Diff_n2_Omega);
+    open_loop_PlantMeasure_Omega = series(open_loop_Plantdelay_Omega,Measure_Omega);
+    %subplot(2,2,3);
+    bode(open_loop_PlantMeasure_Omega,'b'); grid on;
+    %set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
+    hold on;
+elseif (ENCOutputMode == ENCMovFilterMode)
+    %% moving average filter (velocity measurement)
+    s = tf('s');
+    Measure_Omega = 1 / Tsample / SetENCSample * tf([0 1],[1 0]) * (1 - exp(-SetENCSample*Tsample*s)) / (1 - exp(-Tsample*s));
+    open_loop_PlantMeasure_Omega = series(open_loop_Plantdelay_Omega,Measure_Omega);
+    %subplot(2,2,3);
+    bode(open_loop_PlantMeasure_Omega,'b'); grid on;
+    %set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
+    hold on;  
+end
 
 %% omega controller
 
@@ -39,7 +49,7 @@ gain_anti_windup_Omega = 10;
 % hold on;
 
 %% Plant_Omega + diff_Omega + controller
-open_loop_PlantDiff_OmegaController = series(open_loop_PlantDiff_Omega,PI_controller_Omega);
+open_loop_PlantDiff_OmegaController = series(open_loop_PlantMeasure_Omega,PI_controller_Omega);
 subplot(2,2,3);
 bode(open_loop_PlantDiff_OmegaController,'r');%,open_loop_PlantDiff_Omega,'b');
 grid on;
@@ -65,7 +75,7 @@ num_range_Omega = [2.9231 3.2805 3.5144];
 den_range_Omega = [5.0096 4.9856 4.9708];
 
 for i = 1:3
-    plant_range_Omega(i) = tf([0 num_range_Omega(i)],[1 den_range_Omega(i)])* time_delay_tf * Diff_Vel * PI_controller_Omega;
+    plant_range_Omega(i) = tf([0 num_range_Omega(i)],[1 den_range_Omega(i)])* time_delay_tf * Measure_Omega * PI_controller_Omega;
     %bode(tf([0 num_range_Omega(i)],[1 den_range_Omega(i)])* time_delay_tf * Diff_Vel * PI_Vel_controller)
     bode(plant_range_Omega(i))
     hold on;

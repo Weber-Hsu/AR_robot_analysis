@@ -12,28 +12,38 @@ bode(Plant_Vel,'g');grid on;
 hold on;
 
 open_loop_Plantdelay_Vel = series(Plant_Vel,time_delay_tf);
-%% differential equation (velocity measurement)
+%% velocity measurement
 
-Diff_n1_Vel = tf([0 1],[1 0]);
-Diff_n2_Vel = tf([0 1],[1,0],'InputDelay',Tsample);
-Diff_Vel = 1/Tsample*(Diff_n1_Vel - Diff_n2_Vel);
-
-open_loop_PlantDiff_Vel = series(open_loop_Plantdelay_Vel,Diff_Vel);
-%subplot(2,2,3);
-bode(open_loop_PlantDiff_Vel,'b'); grid on;
-%set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
-hold on;
-
+if (ENCOutputMode == ENCDiffMode)
+    %% differential equation (velocity measurement)
+    Diff_n1_Vel = tf([0 1],[1 0]);
+    Diff_n2_Vel = tf([0 1],[1,0],'InputDelay',Tsample);
+    Measure_Vel = 1/Tsample*(Diff_n1_Vel - Diff_n2_Vel);
+    open_loop_PlantMeasure_Vel = series(open_loop_Plantdelay_Vel,Measure_Vel);
+    %subplot(2,2,3);
+    bode(open_loop_PlantMeasure_Vel,'b'); grid on;
+    %set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
+    hold on;
+elseif (ENCOutputMode == ENCMovFilterMode)
+    %% moving average filter (velocity measurement)
+    s = tf('s');
+    Measure_Vel = 1 / Tsample / SetENCSample * tf([0 1],[1 0]) * (1 - exp(-SetENCSample*Tsample*s)) / (1 - exp(-Tsample*s));
+    open_loop_PlantMeasure_Vel = series(open_loop_Plantdelay_Vel,Measure_Vel);
+    %subplot(2,2,3);
+    bode(open_loop_PlantMeasure_Vel,'b'); grid on;
+    %set(gcf,'currentaxes',open_loop_PlantDiff_Vel);
+    hold on;  
+end
 %% velocity loop PI controller
 Kp_Vel = 14.9624;%13.1826;
 Ki_Vel = 21.3962;%9.43%21.3962;%32.4291;
 iTerm_Umax_Vel = 22;
 iTerm_Umin_Vel= -22;
 PI_controller_Vel = tf([Kp_Vel Ki_Vel],[1 0]);
-gain_anti_windup_Vel = 10;
+gain_anti_windup_Vel = 1;
 
 %% Plant_Vel + diff_Vel + controller
-open_loop_PlantDiff_VelController = series(open_loop_PlantDiff_Vel,PI_controller_Vel)
+open_loop_PlantDiff_VelController = series(open_loop_PlantMeasure_Vel,PI_controller_Vel)
 subplot(2,2,3);
 bode(open_loop_PlantDiff_VelController,'r');%open_loop_PlantDiff_Vel,'b');
 grid on;
@@ -59,6 +69,6 @@ num_range_vel = [0.6438 1.054 1.169 2.152];
 den_range_vel = [4.957 6.264 6.32 8.309];
 
 for i = 1:4
-    bode((tf([0 num_range_vel(i)],[1 den_range_vel(i)])* time_delay_tf * Diff_Vel * PI_controller_Vel))
+    bode((tf([0 num_range_vel(i)],[1 den_range_vel(i)])* time_delay_tf * Measure_Vel * PI_controller_Vel))
     hold on;
 end

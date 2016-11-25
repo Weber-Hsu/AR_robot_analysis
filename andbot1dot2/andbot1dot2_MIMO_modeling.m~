@@ -6,8 +6,7 @@ time_delay_tf = exp(-Tsample*tf('s')); % time delay system
 if (ENCOutputMode == ENCDiffMode)
     PracLoopDelay = 0.011; % All MCU Loop time delay (Unit: s)
 elseif (ENCOutputMode == ENCMovFilterMode)
-    MovFilterDelay = 0.05; %(Unit: s)
-    PracLoopDelay = 0.002 + MovFilterDelay; % All MCU Loop time delay + moving filter delay (Unit: s)
+    PracLoopDelay = 0.011; % All MCU Loop time delay + (Unit: s)
 end
 %% run MIMO modeling (bode plotting and controller design)
 andbot1dot2_MIMO_modeling_vel_loop; % vel loop m file;
