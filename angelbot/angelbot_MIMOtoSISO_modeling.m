@@ -1,16 +1,17 @@
 clc ; clear ;
-andbot1dot2_param; % param m file
+angelbot_param; % param m file
 
 %% common function
 time_delay_tf = exp(-Tsample*tf('s')); % time delay system
 if (ENCOutputMode == ENCDiffMode)
     PracLoopDelay = 0.011; % All MCU Loop time delay (Unit: s)
 elseif (ENCOutputMode == ENCMovFilterMode)
-    PracLoopDelay = 0.011; % All MCU Loop time delay + (Unit: s)
+    MovFilterDelay = 0.05; %(Unit: s)
+    PracLoopDelay = 0.002 + MovFilterDelay; % All MCU Loop time delay + moving filter delay (Unit: s)
 end
 %% run MIMO modeling (bode plotting and controller design)
-andbot1dot2_MIMO_modeling_vel_loop; % vel loop m file;
-andbot1dot2_MIMO_modeling_omega_loop; % omega loop m file; 
+angelbot_MIMOtoSISO_modeling_vel_loop; % vel loop m file;
+angelbot_MIMOtoSISO_modeling_omega_loop; % omega loop m file; 
 
 %% to simulink
 simulation_time = 10; % set simulation time in simulink (Unit : sec)
@@ -22,7 +23,7 @@ input_Omega = 1; % to simulink
 Umax_Volt = 10; % Unit: V
 Umin_Volt = -10;
 
-sim('andbot1dot2_voltage_loop_frictioncompensation')
+sim('angelbot_MIMOtoSISO_voltage_loop_frictioncompensation')
 %% data management
 
 % plot Vel_loop
