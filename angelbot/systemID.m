@@ -3,10 +3,10 @@ clc;clear;
 syms s a b c Final_value;
 
 %% system ID
-c = 2;
-Final_value = 0.37;
+c = 10;
+Final_value = 0.7148;
 value_when_tau = Final_value * 0.632
-tau = 0.158611; % look into the graph
+tau = 0.3; % look into the graph
 
 G_p = b / (s+a);
 G_p_Final = subs(G_p,{s},{0});
